@@ -1,32 +1,24 @@
-const { interval, fromEvent } = rxjs;
-const { delay, buffer, map, filter, debounceTime } = rxjs.operators;
+const { of, from } = rxjs;
+const { map, flatMap, tap, finalize } = rxjs.operators;
 
-console.group("video 2");
+const cid = github.carltonj2000.cjHomeResolutions.clientId;
+const cs = github.carltonj2000.cjHomeResolutions.clientSecret;
+
+const url = `https://api.github.com/users?client_id=${cid}&client_secret=${cs}`;
+console.group("video 4");
 (() => {
-  console.group("single click");
-
-  const button = document.getElementById("button");
-  const label = document.getElementById("label");
-
-  const clicks = fromEvent(button, "click");
-  clicks.subscribe(e => (label.textContent = "clicked"));
-  clicks.pipe(delay(1000)).subscribe(e => (label.textContent = ""));
-  console.groupEnd();
+  const requestStream = of(url);
+  const responseStream = requestStream
+    .pipe(
+      flatMap(req => from(fetch(req))),
+      tap(x => console.log("t", x))
+    )
+    .subscribe(x => console.log("s", x), undefined, x =>
+      console.log("completed", x)
+    );
 })();
 
-(() => {
-  console.group("double click");
-
-  const button = document.getElementById("button2");
-  const label = document.getElementById("label2");
-
-  const clicks = fromEvent(button, "click");
-  const doubleClicks = clicks.pipe(
-    buffer(clicks.pipe(debounceTime(250))),
-    filter(c => c.length === 2)
-  );
-  doubleClicks.subscribe(e => (label.textContent = "double clicked"));
-  doubleClicks.pipe(delay(1000)).subscribe(e => (label.textContent = ""));
-  console.groupEnd();
-})();
+fetch(url)
+  .then(r => r.json())
+  .then(r => console.log(r));
 console.groupEnd();
