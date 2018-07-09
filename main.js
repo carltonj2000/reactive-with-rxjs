@@ -1,24 +1,25 @@
 const { of, from } = rxjs;
 const { map, flatMap, tap, finalize } = rxjs.operators;
 
-const cid = github.carltonj2000.cjHomeResolutions.clientId;
-const cs = github.carltonj2000.cjHomeResolutions.clientSecret;
-
-const url = `https://api.github.com/users?client_id=${cid}&client_secret=${cs}`;
+const url = `https://api.github.com/users?client_id=${clientId}&client_secret=${clientSecret}`;
 console.group("video 4");
+
 (() => {
-  const requestStream = of(url);
-  const responseStream = requestStream
-    .pipe(
-      flatMap(req => from(fetch(req))),
-      tap(x => console.log("t", x))
-    )
-    .subscribe(x => console.log("s", x), undefined, x =>
-      console.log("completed", x)
-    );
+  console.group("static fetch");
+  from(fetch(url))
+    .pipe(flatMap(resp => resp.json()))
+    .subscribe(r => console.log("static", r));
+  console.groupEnd();
 })();
 
-fetch(url)
-  .then(r => r.json())
-  .then(r => console.log(r));
+(() => {
+  console.group("stream fetch");
+  const reqStream = of(url);
+  const respStream = reqStream.pipe(
+    flatMap(u => from(fetch(url)).pipe(flatMap(resp => resp.json())))
+  );
+  respStream.subscribe(u => console.log("stream", u));
+  console.groupEnd();
+})();
+
 console.groupEnd();
