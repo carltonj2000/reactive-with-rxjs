@@ -1,22 +1,12 @@
-const { of, from, fromEvent } = rxjs;
-const { map, flatMap, merge } = rxjs.operators;
+const { of, from } = rxjs;
+const { map, flatMap } = rxjs.operators;
 
 const url = `https://api.github.com/users?client_id=${clientId}&client_secret=${clientSecret}`;
-console.group("video 6");
+console.group("video 5");
 
 (() => {
-  const startup = of(url);
-  const refresh = document.querySelector(".refresh");
-  const refClick = fromEvent(refresh, "click");
-
-  const reqRefeshStream = refClick.pipe(
-    map(e => {
-      const rmndOfst = Math.floor(Math.random() * 500);
-      return of(`${url}&since=${rmndOfst}`);
-    })
-  );
-  const respStream = reqRefeshStream.pipe(
-    merge(startup),
+  const reqStream = of(url);
+  const respStream = reqStream.pipe(
     flatMap(u => from(fetch(url)).pipe(flatMap(resp => resp.json())))
   );
   const createSuggestionStream = responseStream => {
