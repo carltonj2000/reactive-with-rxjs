@@ -5,8 +5,20 @@
   <meta charset="utf-8">
   <title>RxJS Reactive</title>
   <style media="screen">
-    h4 {
+    h3 {
       display: inline-block;
+    }
+
+    img {
+      width: 100px;
+      border-radius: 50px;
+      margin-right: 20px;
+    }
+
+    li {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   </style>
 </head>
@@ -16,11 +28,25 @@
 
 <body>
   <h1>RxJS Reactive</h1>
-  <button id="button">Button</button>
-  <h4 id='label'>default</h4>
-  <br />
-  <button id="button2">Button 2</button>
-  <h4 id='label2'>default</h4>
+  <h3>Who to follow</h3> <a href="#" class="refresh">Refresh</a>
+
+  <ul class="suggestions">
+    <li class="suggestion1">
+      <img />
+      <a href="#" target="_blank" class="username">This will not be displayed</a> -
+      <a href="#" class="close close1">x</a>
+    </li>
+    <li class="suggestion2">
+      <img />
+      <a href="#" target="_blank" class="username">neither this</a> -
+      <a href="#" class="close close2">x</a>
+    </li>
+    <li class="suggestion3">
+      <img />
+      <a href="#" target="_blank" class="username">nor this</a> -
+      <a href="#" class="close close3">x</a>
+    </li>
+  </ul>
   <script type="text/javascript" src="keys.js">
   </script>
   <script type="text/javascript" src="main.js">
