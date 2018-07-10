@@ -1,5 +1,5 @@
 const { of, from, fromEvent } = rxjs;
-const { tap, map, flatMap, merge, startWith, shareReplay } = rxjs.operators;
+const { tap, map, flatMap, merge, startWith } = rxjs.operators;
 
 const url = `https://api.github.com/users?client_id=${clientId}&client_secret=${clientSecret}`;
 console.group("video 6");
@@ -17,8 +17,7 @@ console.group("video 6");
   );
   const respStream = reqRefeshStream.pipe(
     merge(startup),
-    flatMap(u => from(fetch(url)).pipe(flatMap(resp => resp.json()))),
-    shareReplay(1)
+    flatMap(u => from(fetch(url)).pipe(flatMap(resp => resp.json())))
   );
   const createSuggestionStream = responseStream => {
     return responseStream.pipe(
